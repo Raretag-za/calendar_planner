@@ -1,7 +1,7 @@
 library calendar_planner;
+import 'package:calendar_planner/src/calendar_planner_style.dart';
+import 'package:calendar_planner/src/calendar_planner_task.dart';
+import 'package:calendar_planner/src/calendar_planner_title.dart';
+import 'package:flutter/cupertino.dart';
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+part 'package:calendar_planner/src/calendar_planner.dart';

@@ -1,8 +1,5 @@
-import 'package:flutter/cupertino.dart';
+part of 'package:calendar_planner/calendar_planner.dart';
 
-import 'calendar_planner_style.dart';
-import 'calendar_planner_task.dart';
-import 'calendar_planner_title.dart';
 
 class CalendarPlanner extends StatefulWidget {
 
