@@ -3,8 +3,11 @@ import 'package:calendar_planner/src/calendar_planner_column.dart';
 import 'package:calendar_planner/src/calendar_planner_filter.dart';
 import 'package:calendar_planner/src/calendar_planner_style.dart';
 import 'package:calendar_planner/src/calendar_planner_task.dart';
+import 'package:calendar_planner/src/calendar_planner_time_task.dart';
 import 'package:calendar_planner/src/calendar_planner_title.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:time_planner/time_planner.dart';
 
 import 'calendar_planner_employee_card.dart';
 import 'calendar_planner_time.dart';
@@ -129,15 +132,69 @@ class _CalendarPlannerState extends State<CalendarPlanner> {
     });
   }
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Row(
+  //     children: [
+  //       for (int i = 0; i < 1; i++)
+  //          const CalendarPlannerEmployeeCard(employeeName: "John Doe",imageUrl: "",)
+  //     ],
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        for (int i = 0; i < 1; i++)
-          const CalendarPlannerEmployeeCard()
-      ],
-    );
+    List<String> employees = [
+      "John",
+      "Jane",
+      "Alice",
+      "Bob",
+      "Eva",
+      "Michael",
+      "Olivia",
+      "William",
+      "Sophia",
+      "David",
+    ];
+    List<MyTimePlannerTask> tasks = [
+      MyTimePlannerTask(
+          color: Colors.green,
+          dateTime: TimePlannerDateTime(day:0,hour: 13,minutes: 0),
+          minutesDuration: 60,
+          daysDuration: 1,
+          employeeName: "John",
+          onTap: (){
+
+          },
+        child: Text(
+         'Task 1',
+          style: TextStyle(
+              color: Colors.black
+          ),
+          textAlign: TextAlign.left,
+        ),
+
+      ),
+    ];
+   return Scaffold(
+       body: Column(
+         children: [
+           Padding(
+             padding: EdgeInsets.only(top: 16,left:100,bottom: 32), // Adjust the top padding as needed
+             child: CalendarPlannerFilter(),
+           ),
+           Expanded(
+             child: CalendarPlannerTask(
+                 tasks: tasks,
+                 employees: employees,
+                 startHour: 8,
+                 endHour: 17),
+           ),
+         ],
+       ),
+     );
   }
+
 
   String formattedTime(int hour) {
     /// this method formats the input hour into a time string
