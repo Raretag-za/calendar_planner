@@ -1,4 +1,5 @@
 import 'package:calendar_planner/config/global_config.dart' as config;
+import 'package:calendar_planner/src/ProductDetails.dart';
 import 'package:calendar_planner/src/calendar_planner_column.dart';
 import 'package:calendar_planner/src/calendar_planner_filter.dart';
 import 'package:calendar_planner/src/calendar_planner_style.dart';
@@ -8,6 +9,8 @@ import 'package:calendar_planner/src/calendar_planner_title.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:time_planner/time_planner.dart';
+import 'package:calendar_planner/src/PersonDetails.dart';
+import 'package:calendar_planner/src/BookingDetails.dart';
 
 import 'calendar_planner_employee_card.dart';
 import 'calendar_planner_time.dart';
@@ -38,17 +41,50 @@ class CalendarPlanner extends StatefulWidget {
   //Whether the time is displayed on the axis of the tim or on the center of the timeblock. Default is false.
   final bool setTimeOnAxis;
 
-  const CalendarPlanner(
-      {Key? key,
-      required this.startHour,
-      required this.endHour,
-      required this.headers,
-      this.tasks,
-      this.style,
-      this.use24HourFormat = false,
-      this.setTimeOnAxis = false,
-      this.currentTimeAnimation})
-      : super(key: key);
+  /// Whether to display filter for the calendar
+  final bool filter;
+//
+  final List<Map<String, String>> productList;
+//
+  List<MyTimePlannerTask> events;
+//
+  final List<String> people;
+//
+  void Function()? changeDate;
+//
+  void Function(Booking booking)? submitBooking;
+//
+  void Function()? productChange;
+//
+  final List<Person>? customer;
+  //
+  final List<Product>? products;
+  //
+  final List<Person>? stylist;
+  //
+
+
+  CalendarPlanner({
+    Key? key,
+    required this.startHour,
+    required this.endHour,
+    required this.headers,
+    this.tasks,
+    this.style,
+    required this.productList,
+    this.use24HourFormat = false,
+    this.setTimeOnAxis = false,
+    this.currentTimeAnimation,
+    this.filter = false,
+    this.changeDate,
+    required this.people,
+    this.productChange,
+    this.submitBooking,
+    required this.events,
+    this.customer,
+    this.products,
+    this.stylist,
+  }) : super(key: key);
 
   @override
   State<CalendarPlanner> createState() => _CalendarPlannerState();
@@ -144,57 +180,36 @@ class _CalendarPlannerState extends State<CalendarPlanner> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> employees = [
-      "John",
-      "Jane",
-      "Alice",
-      "Bob",
-      "Eva",
-      "Michael",
-      "Olivia",
-      "William",
-      "Sophia",
-      "David",
-    ];
-    List<MyTimePlannerTask> tasks = [
-      MyTimePlannerTask(
-          color: Colors.green,
-          dateTime: TimePlannerDateTime(day:0,hour: 13,minutes: 0),
-          minutesDuration: 60,
-          daysDuration: 1,
-          employeeName: "John",
-          onTap: (){
-
-          },
-        child: Text(
-         'Task 1',
-          style: TextStyle(
-              color: Colors.black
+    return Scaffold(
+      body: Column(
+        children: [
+          if (widget.filter)
+            Padding(
+              padding: EdgeInsets.only(
+                  top: 16,
+                  left: 100,
+                  bottom: 32), // Adjust the top padding as needed
+              child: CalendarPlannerFilter(
+                products: widget.productList,
+                changeDate: widget.changeDate,
+                submit: widget.submitBooking,
+                productChange: widget.productChange,
+                customer: widget.customer,
+                product: widget.products,
+                stylists: widget.stylist,
+              ),
+            ),
+          Expanded(
+            child: CalendarPlannerTask(
+                tasks: widget.events,
+                employees: widget.people,
+                startHour: widget.startHour,
+                endHour: widget.endHour),
           ),
-          textAlign: TextAlign.left,
-        ),
-
+        ],
       ),
-    ];
-   return Scaffold(
-       body: Column(
-         children: [
-           Padding(
-             padding: EdgeInsets.only(top: 16,left:100,bottom: 32), // Adjust the top padding as needed
-             child: CalendarPlannerFilter(),
-           ),
-           Expanded(
-             child: CalendarPlannerTask(
-                 tasks: tasks,
-                 employees: employees,
-                 startHour: 8,
-                 endHour: 17),
-           ),
-         ],
-       ),
-     );
+    );
   }
-
 
   String formattedTime(int hour) {
     /// this method formats the input hour into a time string

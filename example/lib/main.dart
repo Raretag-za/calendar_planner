@@ -1,5 +1,6 @@
 import 'package:calendar_planner/calendar_planner.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 void main() {
   runApp(const MyApp());
@@ -62,8 +63,232 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void dateChange() {
+    print("Change date is triggered");
+  }
+
+  void submitBooking(Booking booking) {
+    Map<String, dynamic> bookingJson = {
+      "bookDate":booking.bookDate,
+      "bookTime":booking.bookTime,
+      "productId":booking.treatmentId,
+      "employeeId":booking.stylistId,
+      "customerId":booking.customerId
+    };
+    String bookingJsonString = json.encode(bookingJson);
+    print("Submit triggered");
+    print(bookingJsonString);
+  }
+
+  void productChange() {
+    print("Product  change triggered");
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<Map<String, String>> product = [
+      {
+        'value': 'Product 1: Delivery To Warehouse And Delivery to customer',
+        'code': '12345',
+      },
+      {
+        'value': 'Product 2',
+        'code': '67890',
+      },
+    ];
+    List<String> employees = [
+      "John",
+      "Jane",
+      "Alice",
+      "Bob",
+      "Eva",
+      "Michael",
+      "Olivia",
+      "William",
+      "Sophia",
+      "David",
+    ];
+    List<MyTimePlannerTask> tasks = [
+      MyTimePlannerTask(
+        color: Colors.green,
+        dateTime: TimePlannerDateTime(day: 0, hour: 13, minutes: 0),
+        minutesDuration: 60,
+        daysDuration: 1,
+        employeeName: "John",
+        onTap: () {},
+        child: Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.start, // Align text to the left
+            children: [
+              SizedBox(height: 10),
+              Text(
+                '13:00 - 13:30',
+                style: TextStyle(
+                  color: Colors.black, // The text color
+                ),
+                textAlign: TextAlign.left, // The text alignment
+              ),
+              SizedBox(height: 10),
+              Text(
+                'James Bond',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold, // The text color
+                ),
+                textAlign: TextAlign.left, // The text alignment
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Hair And Beauty',
+                style: TextStyle(
+                  color: Colors.black, // The text color
+                ),
+                textAlign: TextAlign.left, // The text alignment
+              ),
+            ]), // child: Text(
+        //  'Task 1',
+        //   style: TextStyle(
+        //       color: Colors.black
+        //   ),
+        //   textAlign: TextAlign.left,
+        // ),
+      ),
+      MyTimePlannerTask(
+        color: Colors.deepPurple,
+        dateTime: TimePlannerDateTime(day: 1, hour: 14, minutes: 0),
+        minutesDuration: 50,
+        daysDuration: 1,
+        employeeName: "Jane",
+        onTap: () {},
+        child: Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.start, // Align text to the left
+            children: [
+              // SizedBox(height: 10),
+              Text(
+                '14:00 - 15:50',
+                style: TextStyle(
+                  color: Colors.black, // The text color
+                ),
+                textAlign: TextAlign.left, // The text alignment
+              ),
+              //    SizedBox(height: 10),
+              Text(
+                'James Bond',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold, // The text color
+                ),
+                textAlign: TextAlign.left, // The text alignment
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Hair And Beauty',
+                style: TextStyle(
+                  color: Colors.black, // The text color
+                ),
+                textAlign: TextAlign.left, // The text alignment
+              ),
+            ]), // child: Text(
+        //  'Task 1',
+        //   style: TextStyle(
+        //       color: Colors.black
+        //   ),
+        //   textAlign: TextAlign.left,
+        // ),
+      ),
+    ];
+    List<Person> partner = [
+      Person(
+        firstName: "James",
+        middleName: "",
+        surname: "Nkosi",
+        contactNumber: "",
+      ),
+      Person(
+        firstName: "John",
+        middleName: "",
+        surname: "Doe",
+        contactNumber: "",
+      ),
+      Person(
+          firstName: "Temba",
+          middleName: "",
+          surname: "Richie",
+          contactNumber: "0814736003",
+          email: "temba@gmail.com")
+    ];
+    List<Product> products = [
+      Product(
+        name: "Blow Dry",
+        category: "",
+        code: "",
+        price: "300.00",
+      ),
+      Product(
+        name: "Tai Massage",
+        category: "",
+        code: "",
+        price: "600.00",
+      ),
+      Product(
+        name: "Dyeing",
+        category: "",
+        code: "",
+        price: "200.00",
+      ),
+      Product(
+        name: "Fade Cut",
+        category: "",
+        code: "",
+        price: "150.00",
+      ),
+      Product(
+        name: "Pedicure",
+        category: "",
+        code: "",
+        price: "200.00",
+      ),
+      Product(
+        name: "Manicure",
+        category: "",
+        code: "",
+        price: "150.00",
+      ),
+      Product(
+        name: "Mani and Pedi",
+        category: "",
+        code: "",
+        price: "300.00",
+      )
+    ];
+
+    List<Person> stylist = [
+      Person(
+        firstName: "James",
+        middleName: "Mikey",
+        surname: "Nkosi",
+        contactNumber: "",
+      ),
+      Person(
+        firstName: "James",
+        middleName: "Wesley",
+        surname: "Nkosi",
+        contactNumber: "",
+      ),
+      Person(
+        firstName: "Joe",
+        middleName: "",
+        surname: "Doey",
+        contactNumber: "",
+      ),
+      Person(
+        firstName: "Justin",
+        middleName: "",
+        surname: "Bieber",
+        contactNumber: "",
+      ),
+    ];
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -76,7 +301,27 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: const CalendarPlanner(startHour: 8, endHour: 17, headers: [CalendarPlannerTitle(title: 'Title',)],), // This trailing comma makes auto-formatting nicer for build methods.
+      body:
+          //const Cale
+          CalendarPlanner(
+        startHour: 8,
+        endHour: 17,
+        headers: [
+          CalendarPlannerTitle(
+            title: 'Title',
+          )
+        ],
+        filter: true,
+        productList: product,
+        people: employees,
+        events: tasks,
+        changeDate: dateChange,
+        submitBooking: submitBooking,
+        productChange: productChange,
+        customer: partner,
+        products: products,
+        stylist: stylist,
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
