@@ -50,11 +50,14 @@ class CalendarPlanner extends StatefulWidget {
 //
   final List<String> people;
 //
-  void Function()? changeDate;
+  void Function(String currentDate)? changeDate;
 //
   void Function(Booking booking)? submitBooking;
 //
-  void Function()? productChange;
+  void Function(Person person)? createPerson;
+  //
+
+  void Function(String productCode)? productChange;
 //
   final List<Person>? customer;
   //
@@ -62,7 +65,6 @@ class CalendarPlanner extends StatefulWidget {
   //
   final List<Person>? stylist;
   //
-
 
   CalendarPlanner({
     Key? key,
@@ -84,6 +86,7 @@ class CalendarPlanner extends StatefulWidget {
     this.customer,
     this.products,
     this.stylist,
+    this.createPerson,
   }) : super(key: key);
 
   @override
@@ -197,6 +200,7 @@ class _CalendarPlannerState extends State<CalendarPlanner> {
                 customer: widget.customer,
                 product: widget.products,
                 stylists: widget.stylist,
+                createPerson: widget.createPerson,
               ),
             ),
           Expanded(

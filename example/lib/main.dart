@@ -63,25 +63,52 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void dateChange() {
+  void dateChange(String currentDate) {
     print("Change date is triggered");
+    print(currentDate);
   }
 
   void submitBooking(Booking booking) {
     Map<String, dynamic> bookingJson = {
-      "bookDate":booking.bookDate,
-      "bookTime":booking.bookTime,
-      "productId":booking.treatmentId,
-      "employeeId":booking.stylistId,
-      "customerId":booking.customerId
+      "bookDate": booking.bookDate,
+      "bookTime": booking.bookTime,
+      "productId": booking.treatmentId,
+      "employeeId": booking.stylistId,
+      "customerId": booking.customerId
     };
     String bookingJsonString = json.encode(bookingJson);
     print("Submit triggered");
     print(bookingJsonString);
   }
 
-  void productChange() {
+  void createPartner(Person person) {
+    Map<String, dynamic> partnerJson = {
+      "partnerType": "INDIVISUAL",
+      "surname": person.surname,
+      "firstName": person.firstName,
+      "middleName": person.middleName,
+    };
+    String partner = json.encode(partnerJson);
+    print(partner);
+    if(person.email != ''){
+      Map<String, dynamic> emailJson = {
+        "type": "EMAIL",
+        "value": person.email
+      };
+      String email = json.encode(emailJson);
+      print(email);
+    }
+    Map<String, dynamic> contactJson = {
+      "type": "CELLPHONE",
+      "value": person.contactNumber
+    };
+    String contact = json.encode(contactJson);
+    print(contact);
+
+  }
+  void productChange(String product) {
     print("Product  change triggered");
+    print(product);
   }
 
   @override
@@ -321,6 +348,7 @@ class _MyHomePageState extends State<MyHomePage> {
         customer: partner,
         products: products,
         stylist: stylist,
+        createPerson: createPartner,
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

@@ -12,23 +12,25 @@ class CalendarPlannerFilter extends StatefulWidget {
   final List<Person>? customer;
   final List<Product>? product;
   final List<Person>? stylists;
-  void Function()? productChange;
-  void Function()? customerSearch;
-  void Function()? employeeSearch;
+  void Function(String product)? productChange;
+  //void Function()? customerSearch;
+  //void Function()? employeeSearch;
   void Function(Booking booking)? submit;
-  void Function()? changeDate;
+  void Function(Person partner)? createPerson;
+  void Function(String currentDate)? changeDate;
 
   CalendarPlannerFilter(
       {Key? key,
       required this.products,
       this.productChange,
-      this.customerSearch,
-      this.employeeSearch,
+      //this.customerSearch,
+      //this.employeeSearch,
       this.submit,
       this.changeDate,
       this.customer,
       this.product,
-      this.stylists,})
+      this.stylists,
+      this.createPerson,})
       : super(key: key);
 
   @override
@@ -37,6 +39,7 @@ class CalendarPlannerFilter extends StatefulWidget {
 
 class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
   Map<String, String> selectedValue = {};
+  List<Map<String, String>> productsList = [];
   DateTime selectedDate = DateTime.now();
   TextEditingController customerController = TextEditingController();
   TextEditingController customerIdController = TextEditingController();
@@ -54,8 +57,10 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
   @override
   void initState() {
     super.initState();
-    if (widget.products.isNotEmpty) {
-      selectedValue = widget.products[0]; // Select the first item in the list
+    productsList = widget.products;
+    assert(widget.products.isNotEmpty, 'Products list must not be empty.');
+    if (productsList.isNotEmpty) {
+      selectedValue = productsList[0]; // Select the first item in the list
     }
   }
 
@@ -66,7 +71,8 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
         selectedDate = selectedDate.subtract(Duration(days: 1));
       });
       if (widget.changeDate != null) {
-        widget.changeDate!();
+        String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+        widget.changeDate!(formattedDate);
       }
     }
   }
@@ -76,7 +82,8 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
       selectedDate = selectedDate.add(Duration(days: 1));
     });
     if (widget.changeDate != null) {
-      widget.changeDate!();
+      String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+      widget.changeDate!(formattedDate);
     }
   }
 
@@ -334,6 +341,9 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
     if (pickedDate != null) {
       setState(() {
         selectedDate = pickedDate;
+        String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+        widget.changeDate!(formattedDate);
+
       });
     }
   }
@@ -373,7 +383,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                     String name = customerNameController.text;
                     String surname = customerSurnameController.text;
                     String contact = customerContactNumber.text;
-                    String email = customerContactNumber.text;
+                    String email = customerEmailController.text;
 
                     Person customerCreate = Person(
                      firstName: name,
@@ -381,6 +391,9 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                      email: email,
                      contactNumber: contact
                     );
+                    if(widget.createPerson != null){
+                      widget.createPerson!(customerCreate);
+                    }
                     //print(customerCreate);
                     //showConfirmation(context);
                     Navigator.of(context).pop(); // Close the dialog
@@ -422,18 +435,18 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                       // Text('Stylist Search'),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Icon(Icons.close), // Close button (X)
-                        ),
-                      ],
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //    // Text('Stylist Search'),
+                    //     GestureDetector(
+                    //       onTap: () {
+                    //         Navigator.pop(context);
+                    //       },
+                    //       child: Icon(Icons.close), // Close button (X)
+                    //     ),
+                    //   ],
+                    // ),
                   TextField(
                     controller: searchController,
                     decoration: InputDecoration(labelText: 'Search stylist'),
@@ -701,6 +714,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
 
   @override
   Widget build(BuildContext context) {
+    //assert(selectedValue != null, 'Selected value must not be null.');
     String formattedDate = DateFormat('EEEE, d MMMM yyyy').format(selectedDate);
     return Row(
       children: [
@@ -715,12 +729,13 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
             onChanged: (newValue) {
               setState(() {
                 selectedValue = newValue!;
+                if (widget.productChange != null) {
+                  widget.productChange!(selectedValue['code'] ?? '');
+                 }
               });
-              if (widget.productChange != null) {
-                widget.productChange!();
-              }
+
             },
-            items: widget.products
+            items: productsList
                 .map<DropdownMenuItem<Map<String, String>>>((item) {
               final itemKey = Key(item['value'] ?? '');
               return DropdownMenuItem<Map<String, String>>(
