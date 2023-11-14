@@ -65,6 +65,7 @@ class CalendarPlanner extends StatefulWidget {
   //
   final List<Person>? stylist;
   //
+  void Function(String category,String bookDate)? createBooking;
 
   CalendarPlanner({
     Key? key,
@@ -87,6 +88,7 @@ class CalendarPlanner extends StatefulWidget {
     this.products,
     this.stylist,
     this.createPerson,
+    this.createBooking,
   }) : super(key: key);
 
   @override
@@ -186,23 +188,44 @@ class _CalendarPlannerState extends State<CalendarPlanner> {
     return Scaffold(
       body: Column(
         children: [
-          if (widget.filter)
-            Padding(
-              padding: EdgeInsets.only(
-                  top: 16,
-                  left: 100,
-                  bottom: 32), // Adjust the top padding as needed
-              child: CalendarPlannerFilter(
-                products: widget.productList,
-                changeDate: widget.changeDate,
-                submit: widget.submitBooking,
-                productChange: widget.productChange,
-                customer: widget.customer,
-                product: widget.products,
-                stylists: widget.stylist,
-                createPerson: widget.createPerson,
-              ),
+          //Padding(
+          // padding: EdgeInsets.only(
+          //     //top: 16,
+          //     left: 100,
+          //     bottom: 32), // Adjust the top padding as needed
+          // LayoutBuilder(
+          //   builder: (context, constraints) {
+          //     if (widget.filter) {
+          //       CalendarPlannerFilter(
+          //         products: widget.productList,
+          //         changeDate: widget.changeDate,
+          //         submit: widget.submitBooking,
+          //         productChange: widget.productChange,
+          //         customer: widget.customer,
+          //         product: widget.products,
+          //         stylists: widget.stylist,
+          //         createPerson: widget.createPerson,
+          //       );
+          //     } else {
+          //       return Container();
+          //     }
+          //   },
+          // ),
+          Visibility(
+            visible: widget.filter,
+            child: CalendarPlannerFilter(
+              products: widget.productList,
+              changeDate: widget.changeDate,
+              submit: widget.submitBooking,
+              productChange: widget.productChange,
+              customer: widget.customer,
+              product: widget.products,
+              stylists: widget.stylist,
+              createPerson: widget.createPerson,
+              createBooking: widget.createBooking,
+
             ),
+          ),
           Expanded(
             child: CalendarPlannerTask(
                 tasks: widget.events,

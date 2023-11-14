@@ -90,11 +90,8 @@ class _MyHomePageState extends State<MyHomePage> {
     };
     String partner = json.encode(partnerJson);
     print(partner);
-    if(person.email != ''){
-      Map<String, dynamic> emailJson = {
-        "type": "EMAIL",
-        "value": person.email
-      };
+    if (person.email != '') {
+      Map<String, dynamic> emailJson = {"type": "EMAIL", "value": person.email};
       String email = json.encode(emailJson);
       print(email);
     }
@@ -104,11 +101,16 @@ class _MyHomePageState extends State<MyHomePage> {
     };
     String contact = json.encode(contactJson);
     print(contact);
-
   }
+
   void productChange(String product) {
     print("Product  change triggered");
     print(product);
+  }
+
+  void createBooking(String category, String bookDate) {
+    print(category);
+    print(bookDate);
   }
 
   @override
@@ -349,6 +351,7 @@ class _MyHomePageState extends State<MyHomePage> {
         products: products,
         stylist: stylist,
         createPerson: createPartner,
+        createBooking: createBooking,
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

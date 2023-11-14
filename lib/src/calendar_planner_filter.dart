@@ -18,20 +18,22 @@ class CalendarPlannerFilter extends StatefulWidget {
   void Function(Booking booking)? submit;
   void Function(Person partner)? createPerson;
   void Function(String currentDate)? changeDate;
+  void Function(String category, String bookDate)? createBooking;
 
-  CalendarPlannerFilter(
-      {Key? key,
-      required this.products,
-      this.productChange,
-      //this.customerSearch,
-      //this.employeeSearch,
-      this.submit,
-      this.changeDate,
-      this.customer,
-      this.product,
-      this.stylists,
-      this.createPerson,})
-      : super(key: key);
+  CalendarPlannerFilter({
+    Key? key,
+    required this.products,
+    this.productChange,
+    //this.customerSearch,
+    //this.employeeSearch,
+    this.submit,
+    this.changeDate,
+    this.customer,
+    this.product,
+    this.stylists,
+    this.createPerson,
+    this.createBooking,
+  }) : super(key: key);
 
   @override
   _CalendarPlannerFilterState createState() => _CalendarPlannerFilterState();
@@ -106,12 +108,13 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
               });
           if (pickedTime != null) {
             setState(() {
-              String formattedTime = DateFormat.Hm().format(DateTime(2023, 1, 1, pickedTime.hour, pickedTime.minute));
+              String formattedTime = DateFormat.Hm().format(
+                  DateTime(2023, 1, 1, pickedTime.hour, pickedTime.minute));
               timeController.text = formattedTime;
               // selectedTime =
               //     TimeOfDay(hour: pickedTime.hour, minute: pickedTime.minute);
 
-             // timeController.text = selectedTime!.format(context);
+              // timeController.text = selectedTime!.format(context);
             });
           }
         }
@@ -138,7 +141,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
               TextField(
                 decoration: InputDecoration(labelText: 'Stylist*'),
                 controller: stylistController,
-                onTap: (){
+                onTap: () {
                   showStylistSearch(context);
                 },
               ),
@@ -204,13 +207,14 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                   //print(time);
                   //print(customerId);
                   Booking booking = new Booking();
-                  String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+                  String formattedDate =
+                      DateFormat('yyyy-MM-dd').format(selectedDate);
                   booking.customerId = customerId;
                   booking.stylistId = stylistId;
                   booking.treatmentId = productId;
                   booking.bookDate = formattedDate;
                   booking.bookTime = time;
-                  if(widget.submit != null){
+                  if (widget.submit != null) {
                     widget.submit!(booking);
                   }
                   Navigator.of(context).pop(); // Close the dialog
@@ -343,239 +347,240 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
         selectedDate = pickedDate;
         String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
         widget.changeDate!(formattedDate);
-
       });
     }
   }
-  void showCustomerCreate(BuildContext context){
+
+  void showCustomerCreate(BuildContext context) {
     showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context){
-          return AlertDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
           title: Text('Customer Create'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  decoration: InputDecoration(labelText: 'Name*'),
-                  controller: customerNameController,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                decoration: InputDecoration(labelText: 'Name*'),
+                controller: customerNameController,
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: 'Surname*'),
+                controller: customerSurnameController,
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: 'Contact Number*'),
+                controller: customerContactNumber,
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: 'Email Address'),
+                controller: customerEmailController,
+              ),
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                String name = customerNameController.text;
+                String surname = customerSurnameController.text;
+                String contact = customerContactNumber.text;
+                String email = customerEmailController.text;
 
-                ),
-                TextField(
-                  decoration: InputDecoration(labelText: 'Surname*'),
-                  controller: customerSurnameController,
-
-                ),
-                TextField(
-                  decoration: InputDecoration(labelText: 'Contact Number*'),
-                  controller: customerContactNumber,
-                ),
-                TextField(
-                  decoration: InputDecoration(labelText: 'Email Address'),
-                  controller: customerEmailController,
-                ),
-              ],
-            ),
-              actions: [
-                ElevatedButton(
-                  onPressed: () {
-                    String name = customerNameController.text;
-                    String surname = customerSurnameController.text;
-                    String contact = customerContactNumber.text;
-                    String email = customerEmailController.text;
-
-                    Person customerCreate = Person(
-                     firstName: name,
-                     surname: surname,
-                     email: email,
-                     contactNumber: contact
-                    );
-                    if(widget.createPerson != null){
-                      widget.createPerson!(customerCreate);
-                    }
-                    //print(customerCreate);
-                    //showConfirmation(context);
-                    Navigator.of(context).pop(); // Close the dialog
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.green, // Set the background color to red
-                  ),
-                  child: Text('Create'),
-                ),
-                SizedBox(width: 30),
-                ElevatedButton(
-                  onPressed: () {
-                    showConfirmation(context);
-                    //Navigator.of(context).pop(); // Close the dialog
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.red, // Set the background color to red
-                  ),
-                  child: Text('Cancel'),
-                ),
-              ],
-
-          );
-        },
-        );
-  }
-
-  void showStylistSearch(BuildContext context){
-    TextEditingController searchController = TextEditingController();
-    List<Person> filteredStylists = widget.stylists ?? [];
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context){
-          return AlertDialog(
-            title: Text('Stylist Search'),
-            content: StatefulBuilder(
-              builder: (BuildContext context,StateSetter setState){
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //    // Text('Stylist Search'),
-                    //     GestureDetector(
-                    //       onTap: () {
-                    //         Navigator.pop(context);
-                    //       },
-                    //       child: Icon(Icons.close), // Close button (X)
-                    //     ),
-                    //   ],
-                    // ),
-                  TextField(
-                    controller: searchController,
-                    decoration: InputDecoration(labelText: 'Search stylist'),
-                    onChanged: (text){
-                    setState(() {
-                      final String searchText = text.toLowerCase();
-                      filteredStylists =
-                           (widget.stylists ?? []).where((stylist){
-                             return
-                               (stylist.firstName?.toLowerCase() ?? '').contains(searchText) || (stylist.middleName?.toLowerCase() ?? '').contains(searchText) ||
-                                   (stylist.surname?.toLowerCase() ?? '').contains(searchText) ;
-                          }).toList();
-                    });
-                    },
-                  ),
-                    SizedBox(height: 10),
-                  if(filteredStylists.isNotEmpty)
-                    Container(
-                      width: 400,
-                      child:SingleChildScrollView(
-                        child:
-                          Column(
-                            children: filteredStylists.map((stylist){
-                             return Card(
-                               elevation: 8,
-                               child:ListTile(
-                                 leading: Icon(Icons.person_2_sharp),
-                                 title:Text('${stylist.firstName} ${stylist.middleName} ${stylist.surname}'),
-                                 trailing:Icon(Icons.arrow_forward_ios),
-                                 onTap: (){
-                                   String name = stylist.firstName ?? '';
-                                   String lastname = stylist.surname ?? '';
-                                   stylistIdController.text = stylist.personId ?? '';
-                                   stylistController.text = name + ' ' + lastname ;
-                                   Navigator.pop(context);
-                                 },
-                               )
-                             );
-                            }).toList(),
-                          ),
-                      )
-                    )
-                    else
-                      Text('No stylist match found')
-                  ],
-                );
-
+                Person customerCreate = Person(
+                    firstName: name,
+                    surname: surname,
+                    email: email,
+                    contactNumber: contact);
+                if (widget.createPerson != null) {
+                  widget.createPerson!(customerCreate);
+                }
+                //print(customerCreate);
+                //showConfirmation(context);
+                Navigator.of(context).pop(); // Close the dialog
               },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.green, // Set the background color to red
+              ),
+              child: Text('Create'),
             ),
-            //barrierDismissible: false,
-          );
-        },
+            SizedBox(width: 30),
+            ElevatedButton(
+              onPressed: () {
+                showConfirmation(context);
+                //Navigator.of(context).pop(); // Close the dialog
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.red, // Set the background color to red
+              ),
+              child: Text('Cancel'),
+            ),
+          ],
+        );
+      },
     );
   }
 
-  void showTreatSearchPopup(BuildContext context){
+  void showStylistSearch(BuildContext context) {
+    TextEditingController searchController = TextEditingController();
+    List<Person> filteredStylists = widget.stylists ?? [];
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Stylist Search'),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //    // Text('Stylist Search'),
+                  //     GestureDetector(
+                  //       onTap: () {
+                  //         Navigator.pop(context);
+                  //       },
+                  //       child: Icon(Icons.close), // Close button (X)
+                  //     ),
+                  //   ],
+                  // ),
+                  TextField(
+                    controller: searchController,
+                    decoration: InputDecoration(labelText: 'Search stylist'),
+                    onChanged: (text) {
+                      setState(() {
+                        final String searchText = text.toLowerCase();
+                        filteredStylists =
+                            (widget.stylists ?? []).where((stylist) {
+                          return (stylist.firstName?.toLowerCase() ?? '')
+                                  .contains(searchText) ||
+                              (stylist.middleName?.toLowerCase() ?? '')
+                                  .contains(searchText) ||
+                              (stylist.surname?.toLowerCase() ?? '')
+                                  .contains(searchText);
+                        }).toList();
+                      });
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  if (filteredStylists.isNotEmpty)
+                    Container(
+                        width: 400,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: filteredStylists.map((stylist) {
+                              return Card(
+                                  elevation: 8,
+                                  child: ListTile(
+                                    leading: Icon(Icons.person_2_sharp),
+                                    title: Text(
+                                        '${stylist.firstName} ${stylist.middleName} ${stylist.surname}'),
+                                    trailing: Icon(Icons.arrow_forward_ios),
+                                    onTap: () {
+                                      String name = stylist.firstName ?? '';
+                                      String lastname = stylist.surname ?? '';
+                                      stylistIdController.text =
+                                          stylist.personId ?? '';
+                                      stylistController.text =
+                                          name + ' ' + lastname;
+                                      Navigator.pop(context);
+                                    },
+                                  ));
+                            }).toList(),
+                          ),
+                        ))
+                  else
+                    Text('No stylist match found')
+                ],
+              );
+            },
+          ),
+          //barrierDismissible: false,
+        );
+      },
+    );
+  }
+
+  void showTreatSearchPopup(BuildContext context) {
     TextEditingController searchController = TextEditingController();
     List<Product> filteredProducts = widget.product ?? [];
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context){
+      builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Treatment Search'),
-          content:StatefulBuilder(
-            builder:(BuildContext context, StateSetter setState) {
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
                     controller: searchController,
                     decoration: InputDecoration(labelText: 'Search treatment'),
-                    onChanged: (text){
-                    setState(() {
-                      final searchString = text.toLowerCase();
-                      filteredProducts =
-                      (widget.product  ?? []).where((product){
-                        return (product.code?.toLowerCase() ?? '').contains(searchString) ||
-                            (product.name?.toLowerCase() ?? '').contains(searchString) ||
-                            (product.price?.toLowerCase() ?? '').contains(searchString);
-                      }).toList();
-                    });
+                    onChanged: (text) {
+                      setState(() {
+                        final searchString = text.toLowerCase();
+                        filteredProducts =
+                            (widget.product ?? []).where((product) {
+                          return (product.code?.toLowerCase() ?? '')
+                                  .contains(searchString) ||
+                              (product.name?.toLowerCase() ?? '')
+                                  .contains(searchString) ||
+                              (product.price?.toLowerCase() ?? '')
+                                  .contains(searchString);
+                        }).toList();
+                      });
                     },
                   ),
                   SizedBox(height: 10),
-                 if(filteredProducts.isNotEmpty)
-                 Container(
-                   width: 400,
-                   child:SingleChildScrollView(
-                    child:Column(
-                      children: filteredProducts.map((product){
-                        return Card(
-                          elevation: 8,
-                          child:ListTile(
-                            //leading: Icon(Icons.i),
-                            title: Text('${product.name}'),
-                            subtitle:
-                            Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                              children: [
-                                Text('Price:R${product.price ?? '00.00'}'),
-                                Text('Code:${product.code ?? 'N/A'}'),
-                              ],
-                            ) ,
-                            trailing: Icon(Icons.arrow_forward_ios),
-                            onTap: (){
-                              String price = product.price ?? '00.00';
-                              String description = product.name ?? '';
-                              treatmentController.text = description;
-                              treatmentIdController.text = product.id ?? '';
-                              Navigator.pop(context);
-                            },
-                          )
-                        );
-                      }).toList(),
-                    ),
-                   )
-                 )
+                  if (filteredProducts.isNotEmpty)
+                    Container(
+                        width: 400,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: filteredProducts.map((product) {
+                              return Card(
+                                  elevation: 8,
+                                  child: ListTile(
+                                    //leading: Icon(Icons.i),
+                                    title: Text('${product.name}'),
+                                    subtitle: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                            'Price:R${product.price ?? '00.00'}'),
+                                        Text('Code:${product.code ?? 'N/A'}'),
+                                      ],
+                                    ),
+                                    trailing: Icon(Icons.arrow_forward_ios),
+                                    onTap: () {
+                                      String price = product.price ?? '00.00';
+                                      String description = product.name ?? '';
+                                      treatmentController.text = description;
+                                      treatmentIdController.text =
+                                          product.id ?? '';
+                                      Navigator.pop(context);
+                                    },
+                                  ));
+                            }).toList(),
+                          ),
+                        ))
                   else
-                   Text('No matching treaments found.'),
+                    Text('No matching treaments found.'),
                 ],
               );
-            } ,
+            },
           ),
         );
       },
     );
   }
+
   void showCustomerSearchPopup(BuildContext context) {
     List<Person> filteredCustomers = widget.customer ?? [];
     //print(filteredCustomers.length);
@@ -600,10 +605,12 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                         final String searchText = text.toLowerCase();
                         filteredCustomers =
                             (widget.customer ?? []).where((customer) {
-                          return (customer.firstName?.toLowerCase() ?? '').contains(searchText) ||
+                          return (customer.firstName?.toLowerCase() ?? '')
+                                  .contains(searchText) ||
                               (customer.middleName?.toLowerCase() ?? '')
                                   .contains(searchText) ||
-                              (customer.surname?.toLowerCase() ?? '').contains(searchText) ||
+                              (customer.surname?.toLowerCase() ?? '')
+                                  .contains(searchText) ||
                               (customer.contactNumber?.toLowerCase() ?? '')
                                   .contains(searchText) ||
                               (customer.email?.toLowerCase() ?? '')
@@ -638,9 +645,10 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                                 trailing: Icon(Icons.arrow_forward_ios),
                                 onTap: () {
                                   // Handle the selection of a customer here
-                                  String surname =  customer.surname ?? '';
-                                  String name = customer.firstName?? '';
-                                  customerController.text = name  +  ' ' + surname;
+                                  String surname = customer.surname ?? '';
+                                  String name = customer.firstName ?? '';
+                                  customerController.text =
+                                      name + ' ' + surname;
                                   customerIdController.text =
                                       customer.personId ?? '';
                                   Navigator.pop(context);
@@ -721,28 +729,28 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
         Container(
           height: 50,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(0),
+            borderRadius: BorderRadius.circular(20),
             color: Colors.white, // Set the background color of the container
           ),
-          child: DropdownButton<Map<String, String>>(
+          child:
+          DropdownButton<Map<String, String>>(
             value: selectedValue,
             onChanged: (newValue) {
               setState(() {
                 selectedValue = newValue!;
                 if (widget.productChange != null) {
                   widget.productChange!(selectedValue['code'] ?? '');
-                 }
+                }
               });
-
             },
-            items: productsList
-                .map<DropdownMenuItem<Map<String, String>>>((item) {
+            items:
+                productsList.map<DropdownMenuItem<Map<String, String>>>((item) {
               final itemKey = Key(item['value'] ?? '');
               return DropdownMenuItem<Map<String, String>>(
                 key: itemKey,
                 value: item,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -756,6 +764,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                 ),
               );
             }).toList(),
+            underline: Container(),
             //items: <String>[
             //'Hair And Beauty',
             //'Spa'
@@ -792,7 +801,16 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
         ),
         SizedBox(width: 30),
         ElevatedButton(
-          onPressed: () => showAppointmentForm(context),
+          onPressed: () {
+            String selectedProduct = selectedValue['code'] ?? '';
+            if(widget.createBooking != null){
+              widget.createBooking!(selectedProduct, DateFormat('yyyy-MM-dd').format(selectedDate));
+            }
+            else{
+              showAppointmentForm(context);
+            }
+
+          },
           child: Text('Add Appointment'),
         ),
       ],
