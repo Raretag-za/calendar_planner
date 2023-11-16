@@ -1,4 +1,4 @@
-class Booking {
+class BookingDetails {
   String? bookDate;
   String? bookTime;
   String? stylistId;
@@ -6,7 +6,7 @@ class Booking {
   String? treatmentId;
   String? bookId;
 
-  Booking({
+  BookingDetails({
     this.bookDate,
     this.bookTime,
     this.stylistId,

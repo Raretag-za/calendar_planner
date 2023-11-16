@@ -52,7 +52,7 @@ class CalendarPlanner extends StatefulWidget {
 //
   void Function(String currentDate)? changeDate;
 //
-  void Function(Booking booking)? submitBooking;
+  void Function(BookingDetails booking)? submitBooking;
 //
   void Function(Person person)? createPerson;
   //
@@ -61,7 +61,7 @@ class CalendarPlanner extends StatefulWidget {
 //
   final List<Person>? customer;
   //
-  final List<Product>? products;
+  final List<ProductDetails>? products;
   //
   final List<Person>? stylist;
   //

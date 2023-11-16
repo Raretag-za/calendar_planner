@@ -1,11 +1,11 @@
-class Product {
+class ProductDetails {
   final String? name;
   final String? category;
   final String? code;
   final String? price;
   final String? id;
 
-  Product({
+  ProductDetails({
     this.name,
     this.category,
     this.code,

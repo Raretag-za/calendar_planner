@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print(currentDate);
   }
 
-  void submitBooking(Booking booking) {
+  void submitBooking(BookingDetails booking) {
     Map<String, dynamic> bookingJson = {
       "bookDate": booking.bookDate,
       "bookTime": booking.bookTime,
@@ -247,44 +247,44 @@ class _MyHomePageState extends State<MyHomePage> {
           contactNumber: "0814736003",
           email: "temba@gmail.com")
     ];
-    List<Product> products = [
-      Product(
+    List<ProductDetails> products = [
+      ProductDetails(
         name: "Blow Dry",
         category: "",
         code: "",
         price: "300.00",
       ),
-      Product(
+      ProductDetails(
         name: "Tai Massage",
         category: "",
         code: "",
         price: "600.00",
       ),
-      Product(
+      ProductDetails(
         name: "Dyeing",
         category: "",
         code: "",
         price: "200.00",
       ),
-      Product(
+      ProductDetails(
         name: "Fade Cut",
         category: "",
         code: "",
         price: "150.00",
       ),
-      Product(
+      ProductDetails(
         name: "Pedicure",
         category: "",
         code: "",
         price: "200.00",
       ),
-      Product(
+      ProductDetails(
         name: "Manicure",
         category: "",
         code: "",
         price: "150.00",
       ),
-      Product(
+      ProductDetails(
         name: "Mani and Pedi",
         category: "",
         code: "",

@@ -10,15 +10,17 @@ import 'package:calendar_planner/src/ProductDetails.dart';
 class CalendarPlannerFilter extends StatefulWidget {
   final List<Map<String, String>> products;
   final List<Person>? customer;
-  final List<Product>? product;
+  final List<ProductDetails>? product;
   final List<Person>? stylists;
+  final int? selectedIndex;
   void Function(String product)? productChange;
   //void Function()? customerSearch;
   //void Function()? employeeSearch;
-  void Function(Booking booking)? submit;
+  void Function(BookingDetails booking)? submit;
   void Function(Person partner)? createPerson;
   void Function(String currentDate)? changeDate;
   void Function(String category, String bookDate)? createBooking;
+
 
   CalendarPlannerFilter({
     Key? key,
@@ -33,6 +35,7 @@ class CalendarPlannerFilter extends StatefulWidget {
     this.stylists,
     this.createPerson,
     this.createBooking,
+    this.selectedIndex,
   }) : super(key: key);
 
   @override
@@ -42,6 +45,7 @@ class CalendarPlannerFilter extends StatefulWidget {
 class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
   Map<String, String> selectedValue = {};
   List<Map<String, String>> productsList = [];
+
   DateTime selectedDate = DateTime.now();
   TextEditingController customerController = TextEditingController();
   TextEditingController customerIdController = TextEditingController();
@@ -61,8 +65,9 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
     super.initState();
     productsList = widget.products;
     assert(widget.products.isNotEmpty, 'Products list must not be empty.');
+    int index = widget.selectedIndex ?? 0;
     if (productsList.isNotEmpty) {
-      selectedValue = productsList[0]; // Select the first item in the list
+      selectedValue = productsList[index]; // Select the first item in the list
     }
   }
 
@@ -206,7 +211,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                 } else {
                   //print(time);
                   //print(customerId);
-                  Booking booking = new Booking();
+                  BookingDetails booking = new BookingDetails();
                   String formattedDate =
                       DateFormat('yyyy-MM-dd').format(selectedDate);
                   booking.customerId = customerId;
@@ -506,7 +511,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
 
   void showTreatSearchPopup(BuildContext context) {
     TextEditingController searchController = TextEditingController();
-    List<Product> filteredProducts = widget.product ?? [];
+    List<ProductDetails> filteredProducts = widget.product ?? [];
     showDialog(
       context: context,
       barrierDismissible: false,
