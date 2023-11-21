@@ -13,6 +13,7 @@ class CalendarPlannerFilter extends StatefulWidget {
   final List<ProductDetails>? product;
   final List<Person>? stylists;
   final int? selectedIndex;
+  final int stylistLength;
   void Function(String product)? productChange;
   //void Function()? customerSearch;
   //void Function()? employeeSearch;
@@ -36,6 +37,7 @@ class CalendarPlannerFilter extends StatefulWidget {
     this.createPerson,
     this.createBooking,
     this.selectedIndex,
+    required this.stylistLength,
   }) : super(key: key);
 
   @override
@@ -805,6 +807,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
           icon: Icon(Icons.arrow_forward),
         ),
         SizedBox(width: 30),
+        if (widget.stylistLength > 1)
         ElevatedButton(
           onPressed: () {
             String selectedProduct = selectedValue['code'] ?? '';

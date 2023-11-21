@@ -66,6 +66,8 @@ class CalendarPlanner extends StatefulWidget {
   final List<Person>? stylist;
   //
   void Function(String category,String bookDate)? createBooking;
+  //
+
 
   CalendarPlanner({
     Key? key,
@@ -103,6 +105,7 @@ class _CalendarPlannerState extends State<CalendarPlanner> {
   CalendarPlannerStyle style = CalendarPlannerStyle();
   List<CalendarPlannerTask> tasks = [];
   bool? isAnimated = true;
+  int people = 0;
 
   /// check input value rules
   void _checkInputValue() {
@@ -223,16 +226,42 @@ class _CalendarPlannerState extends State<CalendarPlanner> {
               stylists: widget.stylist,
               createPerson: widget.createPerson,
               createBooking: widget.createBooking,
+              stylistLength: widget.people.length,
 
             ),
           ),
-          Expanded(
-            child: CalendarPlannerTask(
-                tasks: widget.events,
-                employees: widget.people,
-                startHour: widget.startHour,
-                endHour: widget.endHour),
-          ),
+          // Expanded(
+          //   // if( widget.people)
+          //   child: CalendarPlannerTask(
+          //       tasks: widget.events,
+          //       employees: widget.people,
+          //       startHour: widget.startHour,
+          //       endHour: widget.endHour),
+          // ),
+      Expanded(
+        child:widget.people.length > 1
+              ? CalendarPlannerTask(
+            tasks: widget.events,
+            employees: widget.people,
+            startHour: widget.startHour,
+            endHour: widget.endHour,
+          )
+              : Center(child:
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children:[
+                      Icon(
+                          Icons.error,
+                            size:100,
+                            color: Colors.black,
+                      ),
+                      Text('No data to display calendar. Please contact the system administrator.',
+                        textAlign: TextAlign.center,)
+                    ]
+
+                ),
+        ),
+      ),
         ],
       ),
     );
