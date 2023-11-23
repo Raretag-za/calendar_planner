@@ -103,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print(contact);
   }
 
-  void productChange(String product) {
+  void productChange(String product, int index) {
     print("Product  change triggered");
     print(product);
   }
@@ -352,6 +352,7 @@ class _MyHomePageState extends State<MyHomePage> {
         stylist: stylist,
         createPerson: createPartner,
         createBooking: createBooking,
+        dateFormated: "",
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

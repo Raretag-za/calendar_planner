@@ -14,13 +14,14 @@ class CalendarPlannerFilter extends StatefulWidget {
   final List<Person>? stylists;
   final int? selectedIndex;
   final int stylistLength;
-  void Function(String product)? productChange;
+  void Function(String product,int index)? productChange;
   //void Function()? customerSearch;
   //void Function()? employeeSearch;
   void Function(BookingDetails booking)? submit;
   void Function(Person partner)? createPerson;
   void Function(String currentDate)? changeDate;
   void Function(String category, String bookDate)? createBooking;
+  final String dateSelected;
 
 
   CalendarPlannerFilter({
@@ -38,6 +39,7 @@ class CalendarPlannerFilter extends StatefulWidget {
     this.createBooking,
     this.selectedIndex,
     required this.stylistLength,
+    required this.dateSelected,
   }) : super(key: key);
 
   @override
@@ -66,7 +68,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
   void initState() {
     super.initState();
     productsList = widget.products;
-    assert(widget.products.isNotEmpty, 'Products list must not be empty.');
+    selectedDate = DateTime.parse(widget.dateSelected);
     int index = widget.selectedIndex ?? 0;
     if (productsList.isNotEmpty) {
       selectedValue = productsList[index]; // Select the first item in the list
@@ -731,6 +733,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
   Widget build(BuildContext context) {
     //assert(selectedValue != null, 'Selected value must not be null.');
     String formattedDate = DateFormat('EEEE, d MMMM yyyy').format(selectedDate);
+    int selectedIndex = -1;
     return Row(
       children: [
         Container(
@@ -746,7 +749,9 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
               setState(() {
                 selectedValue = newValue!;
                 if (widget.productChange != null) {
-                  widget.productChange!(selectedValue['code'] ?? '');
+                  selectedIndex = productsList.indexWhere((item) => item['code'] == selectedValue['code']);
+                  widget.productChange!(selectedValue['code'] ?? '', selectedIndex);
+
                 }
               });
             },
@@ -787,11 +792,13 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
           ),
         ),
         SizedBox(width: 30),
+        if (widget.stylistLength > 1)
         IconButton(
           onPressed: selectBackDate,
           icon: Icon(Icons.arrow_back),
         ),
         SizedBox(width: 16),
+        if (widget.stylistLength > 1)
         GestureDetector(
           onTap: () => showDatePickerDialog(context),
           child: MouseRegion(
@@ -802,6 +809,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
               )),
         ),
         SizedBox(width: 16),
+        if (widget.stylistLength > 1)
         IconButton(
           onPressed: selectNextDate,
           icon: Icon(Icons.arrow_forward),
