@@ -52,20 +52,23 @@ class CalendarPlanner extends StatefulWidget {
 //
   void Function(String currentDate)? changeDate;
 //
-  void Function(Booking booking)? submitBooking;
+  void Function(BookingDetails booking)? submitBooking;
 //
   void Function(Person person)? createPerson;
   //
 
-  void Function(String productCode)? productChange;
+  void Function(String productCode,int index)? productChange;
 //
   final List<Person>? customer;
   //
-  final List<Product>? products;
+  final List<ProductDetails>? products;
   //
   final List<Person>? stylist;
   //
-
+  void Function(String category,String bookDate)? createBooking;
+  //
+ final int? productIndex;
+ final String dateFormated;
   CalendarPlanner({
     Key? key,
     required this.startHour,
@@ -87,6 +90,9 @@ class CalendarPlanner extends StatefulWidget {
     this.products,
     this.stylist,
     this.createPerson,
+    this.createBooking,
+    this.productIndex,
+    required this.dateFormated,
   }) : super(key: key);
 
   @override
@@ -101,6 +107,7 @@ class _CalendarPlannerState extends State<CalendarPlanner> {
   CalendarPlannerStyle style = CalendarPlannerStyle();
   List<CalendarPlannerTask> tasks = [];
   bool? isAnimated = true;
+  int people = 0;
 
   /// check input value rules
   void _checkInputValue() {
@@ -186,30 +193,79 @@ class _CalendarPlannerState extends State<CalendarPlanner> {
     return Scaffold(
       body: Column(
         children: [
-          if (widget.filter)
-            Padding(
-              padding: EdgeInsets.only(
-                  top: 16,
-                  left: 100,
-                  bottom: 32), // Adjust the top padding as needed
-              child: CalendarPlannerFilter(
-                products: widget.productList,
-                changeDate: widget.changeDate,
-                submit: widget.submitBooking,
-                productChange: widget.productChange,
-                customer: widget.customer,
-                product: widget.products,
-                stylists: widget.stylist,
-                createPerson: widget.createPerson,
-              ),
+          //Padding(
+          // padding: EdgeInsets.only(
+          //     //top: 16,
+          //     left: 100,
+          //     bottom: 32), // Adjust the top padding as needed
+          // LayoutBuilder(
+          //   builder: (context, constraints) {
+          //     if (widget.filter) {
+          //       CalendarPlannerFilter(
+          //         products: widget.productList,
+          //         changeDate: widget.changeDate,
+          //         submit: widget.submitBooking,
+          //         productChange: widget.productChange,
+          //         customer: widget.customer,
+          //         product: widget.products,
+          //         stylists: widget.stylist,
+          //         createPerson: widget.createPerson,
+          //       );
+          //     } else {
+          //       return Container();
+          //     }
+          //   },
+          // ),
+          Visibility(
+            visible: widget.filter,
+            child: CalendarPlannerFilter(
+              products: widget.productList,
+              changeDate: widget.changeDate,
+              submit: widget.submitBooking,
+              productChange: widget.productChange,
+              customer: widget.customer,
+              product: widget.products,
+              stylists: widget.stylist,
+              createPerson: widget.createPerson,
+              createBooking: widget.createBooking,
+              stylistLength: widget.people.length,
+              selectedIndex: widget.productIndex,
+              dateSelected: widget.dateFormated,
+
             ),
-          Expanded(
-            child: CalendarPlannerTask(
-                tasks: widget.events,
-                employees: widget.people,
-                startHour: widget.startHour,
-                endHour: widget.endHour),
           ),
+          // Expanded(
+          //   // if( widget.people)
+          //   child: CalendarPlannerTask(
+          //       tasks: widget.events,
+          //       employees: widget.people,
+          //       startHour: widget.startHour,
+          //       endHour: widget.endHour),
+          // ),
+      Expanded(
+        child:widget.people.length > 1
+              ? CalendarPlannerTask(
+            tasks: widget.events,
+            employees: widget.people,
+            startHour: widget.startHour,
+            endHour: widget.endHour,
+          )
+              : Center(child:
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children:[
+                      Icon(
+                          Icons.error,
+                            size:100,
+                            color: Colors.black,
+                      ),
+                      Text('No data to display calendar. Please contact the system administrator.',
+                        textAlign: TextAlign.center,)
+                    ]
+
+                ),
+        ),
+      ),
         ],
       ),
     );

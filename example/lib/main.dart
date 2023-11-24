@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print(currentDate);
   }
 
-  void submitBooking(Booking booking) {
+  void submitBooking(BookingDetails booking) {
     Map<String, dynamic> bookingJson = {
       "bookDate": booking.bookDate,
       "bookTime": booking.bookTime,
@@ -90,11 +90,8 @@ class _MyHomePageState extends State<MyHomePage> {
     };
     String partner = json.encode(partnerJson);
     print(partner);
-    if(person.email != ''){
-      Map<String, dynamic> emailJson = {
-        "type": "EMAIL",
-        "value": person.email
-      };
+    if (person.email != '') {
+      Map<String, dynamic> emailJson = {"type": "EMAIL", "value": person.email};
       String email = json.encode(emailJson);
       print(email);
     }
@@ -104,11 +101,16 @@ class _MyHomePageState extends State<MyHomePage> {
     };
     String contact = json.encode(contactJson);
     print(contact);
-
   }
-  void productChange(String product) {
+
+  void productChange(String product, int index) {
     print("Product  change triggered");
     print(product);
+  }
+
+  void createBooking(String category, String bookDate) {
+    print(category);
+    print(bookDate);
   }
 
   @override
@@ -245,44 +247,44 @@ class _MyHomePageState extends State<MyHomePage> {
           contactNumber: "0814736003",
           email: "temba@gmail.com")
     ];
-    List<Product> products = [
-      Product(
+    List<ProductDetails> products = [
+      ProductDetails(
         name: "Blow Dry",
         category: "",
         code: "",
         price: "300.00",
       ),
-      Product(
+      ProductDetails(
         name: "Tai Massage",
         category: "",
         code: "",
         price: "600.00",
       ),
-      Product(
+      ProductDetails(
         name: "Dyeing",
         category: "",
         code: "",
         price: "200.00",
       ),
-      Product(
+      ProductDetails(
         name: "Fade Cut",
         category: "",
         code: "",
         price: "150.00",
       ),
-      Product(
+      ProductDetails(
         name: "Pedicure",
         category: "",
         code: "",
         price: "200.00",
       ),
-      Product(
+      ProductDetails(
         name: "Manicure",
         category: "",
         code: "",
         price: "150.00",
       ),
-      Product(
+      ProductDetails(
         name: "Mani and Pedi",
         category: "",
         code: "",
@@ -349,6 +351,8 @@ class _MyHomePageState extends State<MyHomePage> {
         products: products,
         stylist: stylist,
         createPerson: createPartner,
+        createBooking: createBooking,
+        dateFormated: "",
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
