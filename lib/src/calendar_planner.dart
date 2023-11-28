@@ -243,7 +243,7 @@ class _CalendarPlannerState extends State<CalendarPlanner> {
           //       endHour: widget.endHour),
           // ),
       Expanded(
-        child:widget.people.length > 1
+        child:widget.people.length > 0
               ? CalendarPlannerTask(
             tasks: widget.events,
             employees: widget.people,

@@ -792,13 +792,13 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
           ),
         ),
         SizedBox(width: 30),
-        if (widget.stylistLength > 1)
+        if (widget.stylistLength > 0)
         IconButton(
           onPressed: selectBackDate,
           icon: Icon(Icons.arrow_back),
         ),
         SizedBox(width: 16),
-        if (widget.stylistLength > 1)
+        if (widget.stylistLength > 0)
         GestureDetector(
           onTap: () => showDatePickerDialog(context),
           child: MouseRegion(
@@ -809,13 +809,13 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
               )),
         ),
         SizedBox(width: 16),
-        if (widget.stylistLength > 1)
+        if (widget.stylistLength > 0)
         IconButton(
           onPressed: selectNextDate,
           icon: Icon(Icons.arrow_forward),
         ),
         SizedBox(width: 30),
-        if (widget.stylistLength > 1)
+        if (widget.stylistLength > 0)
         ElevatedButton(
           onPressed: () {
             String selectedProduct = selectedValue['code'] ?? '';
