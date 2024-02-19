@@ -79,7 +79,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
     DateTime currentDate = DateTime.now();
     if (selectedDate.isAfter(currentDate)) {
       setState(() {
-        selectedDate = selectedDate.subtract(Duration(days: 1));
+        selectedDate = selectedDate.subtract(const Duration(days: 1));
       });
       if (widget.changeDate != null) {
         String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
@@ -90,7 +90,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
 
   void selectNextDate() {
     setState(() {
-      selectedDate = selectedDate.add(Duration(days: 1));
+      selectedDate = selectedDate.add(const Duration(days: 1));
     });
     if (widget.changeDate != null) {
       String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
@@ -129,26 +129,26 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
         }
 
         return AlertDialog(
-          title: Text('Add Appointment'),
+          title: const Text('Add Appointment'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               // Add your appointment form fields here
               TextField(
-                decoration: InputDecoration(labelText: 'Date'),
+                decoration: const InputDecoration(labelText: 'Date'),
                 readOnly: true,
                 controller: TextEditingController(
                     text: DateFormat('EEEE, d MMMM yyyy').format(selectedDate)),
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Customer*'),
+                decoration: const InputDecoration(labelText: 'Customer*'),
                 controller: customerController,
                 onTap: () {
                   showCustomerSearchPopup(context);
                 },
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Stylist*'),
+                decoration: const InputDecoration(labelText: 'Stylist*'),
                 controller: stylistController,
                 onTap: () {
                   showStylistSearch(context);
@@ -158,13 +158,13 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                 onTap: selectTime,
                 child: AbsorbPointer(
                   child: TextField(
-                    decoration: InputDecoration(labelText: 'Time*'),
+                    decoration: const InputDecoration(labelText: 'Time*'),
                     controller: timeController,
                   ),
                 ),
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Treatment*'),
+                decoration: const InputDecoration(labelText: 'Treatment*'),
                 controller: treatmentController,
                 onTap: () {
                   showTreatSearchPopup(context);
@@ -198,7 +198,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text('Error'),
+                        title: const Text('Error'),
                         content: Text(
                             'Please fill in all required fields: ${errorFields.join(", ")}'),
                         actions: [
@@ -206,7 +206,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                             onPressed: () {
                               Navigator.pop(context); // Close the error pop-up
                             },
-                            child: Text('Ok'),
+                            child: const Text('Ok'),
                           ),
                         ],
                       );
@@ -233,20 +233,20 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.green, // Set the background color to red
+                backgroundColor: Colors.green, // Set the background color to red
               ),
-              child: Text('Create'),
+              child: const Text('Create'),
             ),
-            SizedBox(width: 30),
+            const SizedBox(width: 30),
             ElevatedButton(
               onPressed: () {
                 showConfirmation(context);
                 //Navigator.of(context).pop(); // Close the dialog
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.red, // Set the background color to red
+                backgroundColor: Colors.red, // Set the background color to red
               ),
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
           ],
         );
@@ -366,24 +366,24 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Customer Create'),
+          title: const Text('Customer Create'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                decoration: InputDecoration(labelText: 'Name*'),
+                decoration: const InputDecoration(labelText: 'Name*'),
                 controller: customerNameController,
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Surname*'),
+                decoration: const InputDecoration(labelText: 'Surname*'),
                 controller: customerSurnameController,
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Contact Number*'),
+                decoration: const InputDecoration(labelText: 'Contact Number*'),
                 controller: customerContactNumber,
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Email Address'),
+                decoration: const InputDecoration(labelText: 'Email Address'),
                 controller: customerEmailController,
               ),
             ],
@@ -409,20 +409,20 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                 Navigator.of(context).pop(); // Close the dialog
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.green, // Set the background color to red
+                backgroundColor: Colors.green, // Set the background color to red
               ),
-              child: Text('Create'),
+              child: const Text('Create'),
             ),
-            SizedBox(width: 30),
+            const SizedBox(width: 30),
             ElevatedButton(
               onPressed: () {
                 showConfirmation(context);
                 //Navigator.of(context).pop(); // Close the dialog
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.red, // Set the background color to red
+                backgroundColor: Colors.red, // Set the background color to red
               ),
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
           ],
         );
@@ -438,7 +438,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Stylist Search'),
+          title: const Text('Stylist Search'),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Column(
@@ -458,7 +458,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                   // ),
                   TextField(
                     controller: searchController,
-                    decoration: InputDecoration(labelText: 'Search stylist'),
+                    decoration: const InputDecoration(labelText: 'Search stylist'),
                     onChanged: (text) {
                       setState(() {
                         final String searchText = text.toLowerCase();
@@ -474,7 +474,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                       });
                     },
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   if (filteredStylists.isNotEmpty)
                     Container(
                         width: 400,
@@ -484,10 +484,10 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                               return Card(
                                   elevation: 8,
                                   child: ListTile(
-                                    leading: Icon(Icons.person_2_sharp),
+                                    leading: const Icon(Icons.person_2_sharp),
                                     title: Text(
                                         '${stylist.firstName} ${stylist.middleName} ${stylist.surname}'),
-                                    trailing: Icon(Icons.arrow_forward_ios),
+                                    trailing: const Icon(Icons.arrow_forward_ios),
                                     onTap: () {
                                       String name = stylist.firstName ?? '';
                                       String lastname = stylist.surname ?? '';
@@ -502,7 +502,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                           ),
                         ))
                   else
-                    Text('No stylist match found')
+                    const Text('No stylist match found')
                 ],
               );
             },
@@ -521,7 +521,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Treatment Search'),
+          title: const Text('Treatment Search'),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Column(
@@ -529,7 +529,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                 children: [
                   TextField(
                     controller: searchController,
-                    decoration: InputDecoration(labelText: 'Search treatment'),
+                    decoration: const InputDecoration(labelText: 'Search treatment'),
                     onChanged: (text) {
                       setState(() {
                         final searchString = text.toLowerCase();
@@ -545,7 +545,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                       });
                     },
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   if (filteredProducts.isNotEmpty)
                     Container(
                         width: 400,
@@ -566,7 +566,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                                         Text('Code:${product.code ?? 'N/A'}'),
                                       ],
                                     ),
-                                    trailing: Icon(Icons.arrow_forward_ios),
+                                    trailing: const Icon(Icons.arrow_forward_ios),
                                     onTap: () {
                                       String price = product.price ?? '00.00';
                                       String description = product.name ?? '';
@@ -580,7 +580,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                           ),
                         ))
                   else
-                    Text('No matching treaments found.'),
+                    const Text('No matching treaments found.'),
                 ],
               );
             },
@@ -599,7 +599,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Customer Search'),
+          title: const Text('Customer Search'),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Column(
@@ -607,7 +607,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                 children: [
                   TextField(
                     controller: searchController,
-                    decoration: InputDecoration(labelText: 'Search customer'),
+                    decoration: const InputDecoration(labelText: 'Search customer'),
                     onChanged: (text) {
                       //print("Search text: $text");
                       setState(() {
@@ -630,7 +630,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                       //`   .length}");
                     },
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   if (filteredCustomers.isNotEmpty)
                     Container(
                       width: 400,
@@ -641,7 +641,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                               elevation: 8,
                               //margin: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
                               child: ListTile(
-                                leading: Icon(Icons.person),
+                                leading: const Icon(Icons.person),
                                 title: Text(
                                     '${customer.firstName}  ${customer.middleName ?? ''} ${customer.surname ?? ''}'),
                                 subtitle: Column(
@@ -651,7 +651,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                                       Text('${customer.contactNumber ?? ''}'),
                                       Text('${customer.email ?? ''}'),
                                     ]),
-                                trailing: Icon(Icons.arrow_forward_ios),
+                                trailing: const Icon(Icons.arrow_forward_ios),
                                 onTap: () {
                                   // Handle the selection of a customer here
                                   String surname = customer.surname ?? '';
@@ -670,8 +670,8 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                     )
                   else
                     Column(children: [
-                      Text('No matching customers found.'),
-                      SizedBox(height: 10),
+                      const Text('No matching customers found.'),
+                      const SizedBox(height: 10),
                       ElevatedButton(
                         onPressed: () {
                           showCustomerCreate(context);
@@ -679,10 +679,9 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                           //Navigator.of(context).pop(); // Close the dialog
                         },
                         style: ElevatedButton.styleFrom(
-                          primary:
-                              Colors.green, // Set the background color to red
+                          backgroundColor: Colors.green, // Set the background color to red
                         ),
-                        child: Row(
+                        child: const Row(
                           children: <Widget>[
                             Icon(Icons.person_add),
                             SizedBox(width: 8.0),
@@ -706,14 +705,14 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirmation'),
-          content: Text('Are you sure you want to cancel?'),
+          title: const Text('Confirmation'),
+          content: const Text('Are you sure you want to cancel?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the confirmation dialog
               },
-              child: Text('No'),
+              child: const Text('No'),
             ),
             TextButton(
               onPressed: () {
@@ -721,7 +720,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                 Navigator.of(context)
                     .pop(); // Close the appointment form dialog
               },
-              child: Text('Yes'),
+              child: const Text('Yes'),
             ),
           ],
         );
@@ -791,31 +790,31 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
             //  }).toList(),
           ),
         ),
-        SizedBox(width: 30),
-        if (widget.stylistLength > 1)
+        const SizedBox(width: 30),
+        if (widget.stylistLength > 0)
         IconButton(
           onPressed: selectBackDate,
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
         ),
-        SizedBox(width: 16),
-        if (widget.stylistLength > 1)
+        const SizedBox(width: 16),
+        if (widget.stylistLength > 0)
         GestureDetector(
           onTap: () => showDatePickerDialog(context),
           child: MouseRegion(
               cursor: SystemMouseCursors.click,
               child: Text(
                 formattedDate,
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               )),
         ),
-        SizedBox(width: 16),
-        if (widget.stylistLength > 1)
+        const SizedBox(width: 16),
+        if (widget.stylistLength > 0)
         IconButton(
           onPressed: selectNextDate,
-          icon: Icon(Icons.arrow_forward),
+          icon: const Icon(Icons.arrow_forward),
         ),
-        SizedBox(width: 30),
-        if (widget.stylistLength > 1)
+        const SizedBox(width: 30),
+        if (widget.stylistLength > 0)
         ElevatedButton(
           onPressed: () {
             String selectedProduct = selectedValue['code'] ?? '';
@@ -827,7 +826,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
             }
 
           },
-          child: Text('Add Appointment'),
+          child: const Text('Add Appointment'),
         ),
       ],
     );
