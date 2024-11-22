@@ -14,7 +14,7 @@ class CalendarPlannerFilter extends StatefulWidget {
   final List<Person>? stylists;
   final int? selectedIndex;
   final int stylistLength;
-  void Function(String product,int index)? productChange;
+  void Function(String product, int index)? productChange;
   //void Function()? customerSearch;
   //void Function()? employeeSearch;
   void Function(BookingDetails booking)? submit;
@@ -22,7 +22,6 @@ class CalendarPlannerFilter extends StatefulWidget {
   void Function(String currentDate)? changeDate;
   void Function(String category, String bookDate)? createBooking;
   final String dateSelected;
-
 
   CalendarPlannerFilter({
     Key? key,
@@ -63,16 +62,22 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
   TextEditingController customerContactNumber = TextEditingController();
   TextEditingController treatmentIdController = TextEditingController();
   TextEditingController stylistIdController = TextEditingController();
+  late bool btnVisible = true;
 
   @override
   void initState() {
     super.initState();
+
     productsList = widget.products;
     selectedDate = DateTime.parse(widget.dateSelected);
     int index = widget.selectedIndex ?? 0;
     if (productsList.isNotEmpty) {
       selectedValue = productsList[index]; // Select the first item in the list
     }
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   showCategorySelect(context);
+    // });
+    // future();
   }
 
   void selectBackDate() {
@@ -233,7 +238,8 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green, // Set the background color to red
+                backgroundColor:
+                    Colors.green, // Set the background color to red
               ),
               child: const Text('Create'),
             ),
@@ -409,7 +415,8 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                 Navigator.of(context).pop(); // Close the dialog
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green, // Set the background color to red
+                backgroundColor:
+                    Colors.green, // Set the background color to red
               ),
               child: const Text('Create'),
             ),
@@ -458,7 +465,8 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                   // ),
                   TextField(
                     controller: searchController,
-                    decoration: const InputDecoration(labelText: 'Search stylist'),
+                    decoration:
+                        const InputDecoration(labelText: 'Search stylist'),
                     onChanged: (text) {
                       setState(() {
                         final String searchText = text.toLowerCase();
@@ -487,7 +495,8 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                                     leading: const Icon(Icons.person_2_sharp),
                                     title: Text(
                                         '${stylist.firstName} ${stylist.middleName} ${stylist.surname}'),
-                                    trailing: const Icon(Icons.arrow_forward_ios),
+                                    trailing:
+                                        const Icon(Icons.arrow_forward_ios),
                                     onTap: () {
                                       String name = stylist.firstName ?? '';
                                       String lastname = stylist.surname ?? '';
@@ -529,7 +538,8 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                 children: [
                   TextField(
                     controller: searchController,
-                    decoration: const InputDecoration(labelText: 'Search treatment'),
+                    decoration:
+                        const InputDecoration(labelText: 'Search treatment'),
                     onChanged: (text) {
                       setState(() {
                         final searchString = text.toLowerCase();
@@ -566,7 +576,8 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                                         Text('Code:${product.code ?? 'N/A'}'),
                                       ],
                                     ),
-                                    trailing: const Icon(Icons.arrow_forward_ios),
+                                    trailing:
+                                        const Icon(Icons.arrow_forward_ios),
                                     onTap: () {
                                       String price = product.price ?? '00.00';
                                       String description = product.name ?? '';
@@ -607,7 +618,8 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                 children: [
                   TextField(
                     controller: searchController,
-                    decoration: const InputDecoration(labelText: 'Search customer'),
+                    decoration:
+                        const InputDecoration(labelText: 'Search customer'),
                     onChanged: (text) {
                       //print("Search text: $text");
                       setState(() {
@@ -679,7 +691,8 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                           //Navigator.of(context).pop(); // Close the dialog
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green, // Set the background color to red
+                          backgroundColor:
+                              Colors.green, // Set the background color to red
                         ),
                         child: const Row(
                           children: <Widget>[
@@ -728,107 +741,170 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    //assert(selectedValue != null, 'Selected value must not be null.');
-    String formattedDate = DateFormat('EEEE, d MMMM yyyy').format(selectedDate);
+  void showCategorySelect() {
     int selectedIndex = -1;
-    return Row(
-      children: [
-        Container(
-          height: 50,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.white, // Set the background color of the container
-          ),
-          child:
-          DropdownButton<Map<String, String>>(
-            value: selectedValue,
-            onChanged: (newValue) {
-              setState(() {
-                selectedValue = newValue!;
-                if (widget.productChange != null) {
-                  selectedIndex = productsList.indexWhere((item) => item['code'] == selectedValue['code']);
-                  widget.productChange!(selectedValue['code'] ?? '', selectedIndex);
 
-                }
-              });
-            },
-            items:
-                productsList.map<DropdownMenuItem<Map<String, String>>>((item) {
-              final itemKey = Key(item['value'] ?? '');
-              return DropdownMenuItem<Map<String, String>>(
-                key: itemKey,
-                value: item,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(item['value'] ?? ''),
-                      // Text(
-                      //   'Code: ${item['code'] ?? ''}',
-                      //   style: TextStyle(fontSize: 12, color: Colors.grey),
-                      // ),
-                    ],
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            // shape: RoundedRectangleBorder(),
+            title: const Text('CALENDAR-PRODUCT-CATEGORY'),
+            content: Column(mainAxisSize: MainAxisSize.min, children: [
+              DropdownButton<Map<String, String>>(
+                isExpanded: true,
+                borderRadius: BorderRadius.circular(20),
+                value: selectedValue,
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedValue = newValue!;
+                    if (widget.productChange != null) {
+                      selectedIndex = productsList.indexWhere(
+                          (item) => item['code'] == selectedValue['code']);
+                      widget.productChange!(
+                          selectedValue['code'] ?? '', selectedIndex);
+                      btnVisible = false;
+                      Navigator.of(context).pop();
+                    }
+                  });
+                },
+                items: productsList
+                    .map<DropdownMenuItem<Map<String, String>>>((item) {
+                  final itemKey = Key(item['value'] ?? '');
+                  return DropdownMenuItem<Map<String, String>>(
+                    key: itemKey,
+                    value: item,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(item['value'] ?? ''),
+                          ]),
+                    ),
+                  );
+                }).toList(),
+                underline: Container(),
+              ),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ButtonTheme(
+                    shape: const RoundedRectangleBorder(),
+                    textTheme: ButtonTextTheme.accent,
+                    hoverColor: Colors.redAccent,
+                    child: ElevatedButton.icon(
+                      onPressed: () => {
+                        Navigator.of(context).pop(),
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        padding: const EdgeInsets.fromLTRB(
+                          20,
+                          3,
+                          20,
+                          3,
+                        ),
+                      ),
+                      icon: const Icon(Icons.backspace_outlined),
+                      label: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              );
-            }).toList(),
-            underline: Container(),
-            //items: <String>[
-            //'Hair And Beauty',
-            //'Spa'
-            //].map<DropdownMenuItem<String>>((String value) {
-            //return DropdownMenuItem<String>(
-            // value: value,
-            // child: Padding(
-            // padding: const EdgeInsets.all(8.0),
-            //  child: Text(value),
-            //  ),
-            //  );
-            //  }).toList(),
+                ])
+            ]),
+          );
+        });
+  }
+
+  calendarView() {
+    String formattedDate = DateFormat('EEEE, d MMMM yyyy').format(selectedDate);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Visibility(
+          visible: true,
+          child: ElevatedButton(
+            onPressed: () {
+              showCategorySelect();
+            },
+            child: const Text('Change calendar category products'),
           ),
         ),
         const SizedBox(width: 30),
         if (widget.stylistLength > 0)
-        IconButton(
-          onPressed: selectBackDate,
-          icon: const Icon(Icons.arrow_back),
-        ),
+          IconButton(
+            onPressed: selectBackDate,
+            icon: const Icon(Icons.arrow_back),
+          ),
         const SizedBox(width: 16),
         if (widget.stylistLength > 0)
-        GestureDetector(
-          onTap: () => showDatePickerDialog(context),
-          child: MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: Text(
-                formattedDate,
-                style: const TextStyle(fontSize: 16),
-              )),
-        ),
+          GestureDetector(
+            onTap: () => showDatePickerDialog(context),
+            child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Text(
+                  formattedDate,
+                  style: const TextStyle(fontSize: 16),
+                )),
+          ),
         const SizedBox(width: 16),
         if (widget.stylistLength > 0)
-        IconButton(
-          onPressed: selectNextDate,
-          icon: const Icon(Icons.arrow_forward),
-        ),
+          IconButton(
+            onPressed: selectNextDate,
+            icon: const Icon(Icons.arrow_forward),
+          ),
         const SizedBox(width: 30),
         if (widget.stylistLength > 0)
-        ElevatedButton(
-          onPressed: () {
-            String selectedProduct = selectedValue['code'] ?? '';
-            if(widget.createBooking != null){
-              widget.createBooking!(selectedProduct, DateFormat('yyyy-MM-dd').format(selectedDate));
-            }
-            else{
-              showAppointmentForm(context);
-            }
-
-          },
-          child: const Text('Add Appointment'),
-        ),
+          ElevatedButton(
+            onPressed: () {
+              String selectedProduct = selectedValue['code'] ?? '';
+              if (widget.createBooking != null) {
+                widget.createBooking!(selectedProduct,
+                    DateFormat('yyyy-MM-dd').format(selectedDate));
+              } else {
+                showAppointmentForm(context);
+              }
+            },
+            child: const Text('Add Appointment'),
+          ),
       ],
     );
+  }
+
+  bool sought = false;
+  future() {
+    if (btnVisible == true) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showCategorySelect();
+        Navigator.pop(context);
+      });
+      btnVisible = false;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Widget>(
+      future: future(), // Replace with your async method
+      builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+        Widget widget;
+        // Loading state
+        widget = Container(
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            const SizedBox(height: 30),
+            calendarView(),
+            const SizedBox(height: 30),
+          ]),
+        );
+        return widget;
+      });
   }
 }
