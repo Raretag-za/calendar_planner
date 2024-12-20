@@ -23,6 +23,7 @@ class CalendarPlannerFilter extends StatefulWidget {
   void Function(String category, String bookDate)? createBooking;
   final String dateSelected;
 
+
   CalendarPlannerFilter({
     Key? key,
     required this.products,
@@ -63,6 +64,8 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
   TextEditingController treatmentIdController = TextEditingController();
   TextEditingController stylistIdController = TextEditingController();
   late bool btnVisible = true;
+  late  String selectedProduct = '';
+
 
   @override
   void initState() {
@@ -72,7 +75,8 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
     selectedDate = DateTime.parse(widget.dateSelected);
     int index = widget.selectedIndex ?? 0;
     if (productsList.isNotEmpty) {
-      selectedValue = productsList[index]; // Select the first item in the list
+      selectedValue = productsList[index];
+      selectedProduct = selectedValue['value'].toString();// Select the first item in the list
     }
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   showCategorySelect(context);
@@ -82,15 +86,15 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
 
   void selectBackDate() {
     DateTime currentDate = DateTime.now();
-    if (selectedDate.isAfter(currentDate)) {
-      setState(() {
-        selectedDate = selectedDate.subtract(const Duration(days: 1));
-      });
-      if (widget.changeDate != null) {
-        String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
-        widget.changeDate!(formattedDate);
-      }
+    // if (selectedDate.isAfter(currentDate)) {
+    setState(() {
+      selectedDate = selectedDate.subtract(const Duration(days: 1));
+    });
+    if (widget.changeDate != null) {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+      widget.changeDate!(formattedDate);
     }
+    // }
   }
 
   void selectNextDate() {
@@ -222,7 +226,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                   //print(customerId);
                   BookingDetails booking = new BookingDetails();
                   String formattedDate =
-                      DateFormat('yyyy-MM-dd').format(selectedDate);
+                  DateFormat('yyyy-MM-dd').format(selectedDate);
                   booking.customerId = customerId;
                   booking.stylistId = stylistId;
                   booking.treatmentId = productId;
@@ -239,7 +243,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor:
-                    Colors.green, // Set the background color to red
+                Colors.green, // Set the background color to red
               ),
               child: const Text('Create'),
             ),
@@ -416,7 +420,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor:
-                    Colors.green, // Set the background color to red
+                Colors.green, // Set the background color to red
               ),
               child: const Text('Create'),
             ),
@@ -466,19 +470,19 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                   TextField(
                     controller: searchController,
                     decoration:
-                        const InputDecoration(labelText: 'Search stylist'),
+                    const InputDecoration(labelText: 'Search stylist'),
                     onChanged: (text) {
                       setState(() {
                         final String searchText = text.toLowerCase();
                         filteredStylists =
                             (widget.stylists ?? []).where((stylist) {
-                          return (stylist.firstName?.toLowerCase() ?? '')
+                              return (stylist.firstName?.toLowerCase() ?? '')
                                   .contains(searchText) ||
-                              (stylist.middleName?.toLowerCase() ?? '')
-                                  .contains(searchText) ||
-                              (stylist.surname?.toLowerCase() ?? '')
-                                  .contains(searchText);
-                        }).toList();
+                                  (stylist.middleName?.toLowerCase() ?? '')
+                                      .contains(searchText) ||
+                                  (stylist.surname?.toLowerCase() ?? '')
+                                      .contains(searchText);
+                            }).toList();
                       });
                     },
                   ),
@@ -496,7 +500,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                                     title: Text(
                                         '${stylist.firstName} ${stylist.middleName} ${stylist.surname}'),
                                     trailing:
-                                        const Icon(Icons.arrow_forward_ios),
+                                    const Icon(Icons.arrow_forward_ios),
                                     onTap: () {
                                       String name = stylist.firstName ?? '';
                                       String lastname = stylist.surname ?? '';
@@ -539,19 +543,19 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                   TextField(
                     controller: searchController,
                     decoration:
-                        const InputDecoration(labelText: 'Search treatment'),
+                    const InputDecoration(labelText: 'Search treatment'),
                     onChanged: (text) {
                       setState(() {
                         final searchString = text.toLowerCase();
                         filteredProducts =
                             (widget.product ?? []).where((product) {
-                          return (product.code?.toLowerCase() ?? '')
+                              return (product.code?.toLowerCase() ?? '')
                                   .contains(searchString) ||
-                              (product.name?.toLowerCase() ?? '')
-                                  .contains(searchString) ||
-                              (product.price?.toLowerCase() ?? '')
-                                  .contains(searchString);
-                        }).toList();
+                                  (product.name?.toLowerCase() ?? '')
+                                      .contains(searchString) ||
+                                  (product.price?.toLowerCase() ?? '')
+                                      .contains(searchString);
+                            }).toList();
                       });
                     },
                   ),
@@ -569,7 +573,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                                     title: Text('${product.name}'),
                                     subtitle: Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                             'Price:R${product.price ?? '00.00'}'),
@@ -577,7 +581,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                                       ],
                                     ),
                                     trailing:
-                                        const Icon(Icons.arrow_forward_ios),
+                                    const Icon(Icons.arrow_forward_ios),
                                     onTap: () {
                                       String price = product.price ?? '00.00';
                                       String description = product.name ?? '';
@@ -619,24 +623,24 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                   TextField(
                     controller: searchController,
                     decoration:
-                        const InputDecoration(labelText: 'Search customer'),
+                    const InputDecoration(labelText: 'Search customer'),
                     onChanged: (text) {
                       //print("Search text: $text");
                       setState(() {
                         final String searchText = text.toLowerCase();
                         filteredCustomers =
                             (widget.customer ?? []).where((customer) {
-                          return (customer.firstName?.toLowerCase() ?? '')
+                              return (customer.firstName?.toLowerCase() ?? '')
                                   .contains(searchText) ||
-                              (customer.middleName?.toLowerCase() ?? '')
-                                  .contains(searchText) ||
-                              (customer.surname?.toLowerCase() ?? '')
-                                  .contains(searchText) ||
-                              (customer.contactNumber?.toLowerCase() ?? '')
-                                  .contains(searchText) ||
-                              (customer.email?.toLowerCase() ?? '')
-                                  .contains(searchText);
-                        }).toList();
+                                  (customer.middleName?.toLowerCase() ?? '')
+                                      .contains(searchText) ||
+                                  (customer.surname?.toLowerCase() ?? '')
+                                      .contains(searchText) ||
+                                  (customer.contactNumber?.toLowerCase() ?? '')
+                                      .contains(searchText) ||
+                                  (customer.email?.toLowerCase() ?? '')
+                                      .contains(searchText);
+                            }).toList();
                       });
                       // print("Filtered customers: ${filteredCustomers
                       //`   .length}");
@@ -658,7 +662,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                                     '${customer.firstName}  ${customer.middleName ?? ''} ${customer.surname ?? ''}'),
                                 subtitle: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Text('${customer.contactNumber ?? ''}'),
                                       Text('${customer.email ?? ''}'),
@@ -692,7 +696,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
-                              Colors.green, // Set the background color to red
+                          Colors.green, // Set the background color to red
                         ),
                         child: const Row(
                           children: <Widget>[
@@ -761,7 +765,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
                     selectedValue = newValue!;
                     if (widget.productChange != null) {
                       selectedIndex = productsList.indexWhere(
-                          (item) => item['code'] == selectedValue['code']);
+                              (item) => item['code'] == selectedValue['code']);
                       widget.productChange!(
                           selectedValue['code'] ?? '', selectedIndex);
                       btnVisible = false;
@@ -789,35 +793,35 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
               ),
               SizedBox(height: 10),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ButtonTheme(
-                    shape: const RoundedRectangleBorder(),
-                    textTheme: ButtonTextTheme.accent,
-                    hoverColor: Colors.redAccent,
-                    child: ElevatedButton.icon(
-                      onPressed: () => {
-                        Navigator.of(context).pop(),
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        padding: const EdgeInsets.fromLTRB(
-                          20,
-                          3,
-                          20,
-                          3,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ButtonTheme(
+                      shape: const RoundedRectangleBorder(),
+                      textTheme: ButtonTextTheme.accent,
+                      hoverColor: Colors.redAccent,
+                      child: ElevatedButton.icon(
+                        onPressed: () => {
+                          Navigator.of(context).pop(),
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          padding: const EdgeInsets.fromLTRB(
+                            20,
+                            3,
+                            20,
+                            3,
+                          ),
                         ),
-                      ),
-                      icon: const Icon(Icons.backspace_outlined),
-                      label: const Text(
-                        'Cancel',
-                        style: TextStyle(
-                          color: Colors.white,
+                        icon: const Icon(Icons.backspace_outlined),
+                        label: const Text(
+                          'Cancel',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ])
+                  ])
             ]),
           );
         });
@@ -834,8 +838,10 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
           child: ElevatedButton(
             onPressed: () {
               showCategorySelect();
+
+              selectedProduct = selectedValue['value'].toString();
             },
-            child: const Text('Change calendar category products'),
+            child:  Text(selectedProduct),
           ),
         ),
         const SizedBox(width: 30),
@@ -865,7 +871,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
         if (widget.stylistLength > 0)
           ElevatedButton(
             onPressed: () {
-              String selectedProduct = selectedValue['code'] ?? '';
+              selectedProduct = selectedValue['code'] ?? '';
               if (widget.createBooking != null) {
                 widget.createBooking!(selectedProduct,
                     DateFormat('yyyy-MM-dd').format(selectedDate));
@@ -885,6 +891,7 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         showCategorySelect();
         Navigator.pop(context);
+        selectedProduct = selectedValue['value'].toString();
       });
       btnVisible = false;
     }
@@ -893,18 +900,18 @@ class _CalendarPlannerFilterState extends State<CalendarPlannerFilter> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Widget>(
-      future: future(), // Replace with your async method
-      builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
-        Widget widget;
-        // Loading state
-        widget = Container(
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            const SizedBox(height: 30),
-            calendarView(),
-            const SizedBox(height: 30),
-          ]),
-        );
-        return widget;
-      });
+        future: future(), // Replace with your async method
+        builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+          Widget widget;
+          // Loading state
+          widget = Container(
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              const SizedBox(height: 30),
+              calendarView(),
+              const SizedBox(height: 30),
+            ]),
+          );
+          return widget;
+        });
   }
 }
